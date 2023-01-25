@@ -11,9 +11,9 @@
       <div class="col-md-8">
         <div class="card-body">
           <h5 class="card-title">
-            {{$viewData["products"]["name"]}}({{$viewData["products"]["price"]}})
+            {{strtoupper($viewData["products"]["name"])}} ({{$viewData["products"]["price"]}})
           </h5>
-          <p class="card-text">{{$viewData["products"]["description"]}}</p>
+          <p class="card-text">{{strtoupper($viewData["products"]["description"])}}</p>
           <p class="card-text"><small class="text-muted">Añadir a la cesta</small></p>
         </div>
       </div>
