@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\ViewErrorBag;
+use Illuminate\Support\Facades\DB;
 
 class AdminProductController extends Controller
 {
@@ -28,11 +30,11 @@ class AdminProductController extends Controller
         $newProduct -> setName($validateData["name"]);
         $newProduct -> setDescription($validateData["description"]);
         $newProduct -> setPrice($validateData["price"]);;
-        $newProduct -> setImage('image.jpg');
+        $newProduct -> setImage('image.png');
         $newProduct -> save();
 
         if($request -> hasFile("image")){
-            $imageName =  $newProduct -> id .'.'. $request->image->extension();
+            $imageName =  $newProduct -> $id .'.'. $request->image->extension();
             $newProduct -> setImage($imageName);
             $newProduct -> save();
         } 
@@ -43,5 +45,36 @@ class AdminProductController extends Controller
         );
 
         return redirect()->back();
+    }
+
+    public function delete(int $id){
+        $producto = Product::findOrFail($id);
+        $producto->delete();
+        return redirect()->back();
+    }
+
+    public function edit(int $id){
+        $viewData = [];
+        $viewData["title"] = "Panel de control";
+        $viewData["product"] = Product::find($id);
+        return view('admin.product.edit')->with("viewData", $viewData);
+    }
+
+    public function update(int $id, Request $request){
+        $product = Product::findOrFail($id);
+        $product->update($request->all());
+
+        if($request -> hasFile("image")){
+            Storage::disk('public')->delete(Product::find($id)->image);
+            $imageName =  $product->id.".".$request->image->extension();
+            $product -> setImage($imageName);
+
+            Storage::disk('public')->put(
+                $imageName,
+                file_get_contents($request->file('image')->getRealPath())
+            );
+        }
+        $product->save();
+        return redirect()->route('admin.products.index'); 
     }
 }

@@ -73,8 +73,19 @@
                 <tr>
                     <td>{{ $product['id'] }}</td>
                     <td>{{ $product['name'] }}</td>
-                    <td><a href="">Editar</a></td>
-                    <td><a href="">Eliminar</a></td>
+                    <td>
+                        <form action="{{ route('admin.product.edit', $product->getId()) }}" method="GET">
+                            @method('PUT')
+                            <button class="btn btn-outline-info">Editar</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{route('admin.products.delete',$product->getId())}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button  class="btn btn-outline-danger">Eliminar</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach           
 
