@@ -26,4 +26,23 @@ class HomeController extends Controller
             return view('home.index')->with("viewData", $viewData);
         
     }
+
+    public function configuration(){
+
+        $viewData = [];
+        $viewData["title"] = "Configuration - Tienda online";
+        $viewData["subtitle"] = "Profile Appearence Preferences";
+        
+        return view('home.configuration')->with("viewData", $viewData);
+    }
+
+    public function session(Request $request){
+        
+        session([
+                'headerColor'=>$request->input('headerColor'),
+                'font'=>$request->input('font')
+        ]);
+
+        return redirect()->route('home.index');
+    }
 }

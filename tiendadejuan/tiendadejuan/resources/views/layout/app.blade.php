@@ -12,7 +12,11 @@
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <title>@yield('title','Tienda Online')</title>
   <link rel="stylesheet" type="text/css" href="https://www3.gobiernodecanarias.org/educacion/cau_ce/cookies/cookieconsent.min.css"/><script  type="text/javascript" src="https://www3.gobiernodecanarias.org/educacion/cau_ce/cookies/cookieconsent.min.js"></script><script type="text/javascript" src="https://www3.gobiernodecanarias.org/educacion/cau_ce/cookies/cauce_cookie.js"></script><script type="text/javascript" src="https://www3.gobiernodecanarias.org/educacion/cau_ce/estadisticasweb/scripts/piwik-base.js"></script><script type="text/javascript" src="https://www3.gobiernodecanarias.org/educacion/cau_ce/estadisticasweb/scripts/piwik-eforma.js"></script></head>
-  <body>
+  @if(Session::has('font'))
+    <body style="font-family: {{ Session::get('font') }}">
+  @else
+    <body>
+  @endif
     
     <!-- header -->
     
@@ -35,13 +39,29 @@
             <a class="nav-link active" href="{{route('home.index')}}">Home</a>
             <a class="nav-link active" href="{{route('home.about')}}">About</a>
             <a class="nav-link active" href="{{route('products.index')}}">Products</a>
-            <a class="nav-link active" href="{{route('admin.home.index')}}">Control Panel</a>
+            
+            @if (Auth::user() && Auth::user()->getRole() == 'admin') 
+              <a class="nav-link active" href="{{route('admin.home.index')}}">Control Panel</a>              
+            @endif
+            @if (!Auth::user())
+                <a class="nav-link active" href="{{route('login')}}">Log In</a>
+                <a class="nav-link active" href="{{route('register')}}">Register</a>
+            @else
+            <a class="nav-link active" href="{{route('home.configuration')}}">Configuration</a>
+            <a class="nav-link active" href="{{'logout'}}">Log Out</a>
+            @endif
+            
           </div>
         </div>
       </div>
     </nav>
     
-    <header class="masthead bg-primary text-white text-center py-4">
+    @if (Session::has('headerColor'))
+    <header class="masthead  text-white text-center py-4" style="background-color: {{Session::get('headerColor')}}">
+    @else
+        <header class="masthead bg-primary text-white text-center py-4">
+    @endif
+    
       <div class="container d-flex align-items-center flex-column">
         <h2>@yield('subtitle','Una tienda online Laravel')</h2>
       </div>

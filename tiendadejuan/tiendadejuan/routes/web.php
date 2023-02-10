@@ -22,14 +22,26 @@ Route::get('/products', 'App\Http\Controllers\ProductController@index')->name("p
 
 Route::get('/products/{id}', 'App\Http\Controllers\ProductController@show')->name("products.show");
 
-Route::get('/admin', 'App\Http\Controllers\Admin\AdminHomeController@index')->name("admin.home.index");
+Route::middleware('admin')->group(function () {
+        
+    Route::get('/admin', 'App\Http\Controllers\Admin\AdminHomeController@index')->name("admin.home.index");
 
-Route::get('/admin/products', 'App\Http\Controllers\Admin\AdminProductController@index')->name("admin.products.index");
+    Route::get('/admin/products', 'App\Http\Controllers\Admin\AdminProductController@index')->name("admin.products.index");
 
-Route::post('/admin/products/store', 'App\Http\Controllers\Admin\AdminProductController@store')->name("admin.products.store");
+    Route::post('/admin/products/store', 'App\Http\Controllers\Admin\AdminProductController@store')->name("admin.products.store");
 
-Route::delete('/admin/products/{id}/delete', 'App\Http\Controllers\Admin\AdminProductController@delete')->name("admin.products.delete");
+    Route::delete('/admin/products/{id}/delete', 'App\Http\Controllers\Admin\AdminProductController@delete')->name("admin.products.delete");
 
-Route::get('admin/products/{id}/edit', 'App\Http\Controllers\Admin\AdminProductController@edit')->name("admin.product.edit");
+    Route::get('/admin/products/{id}/edit', 'App\Http\Controllers\Admin\AdminProductController@edit')->name("admin.product.edit");
 
-Route::put('/admin/products/{id}/update', 'App\Http\Controllers\Admin\AdminProductController@update')->name("admin.products.update");
+    Route::put('/admin/products/{id}/update', 'App\Http\Controllers\Admin\AdminProductController@update')->name("admin.products.update");
+
+});
+
+Route::get('logout', 'App\Http\Controllers\Auth\LoginController@logout');
+
+Auth::routes();
+
+Route::get('/configuration', 'App\Http\Controllers\HomeController@configuration')->name("home.configuration");
+
+Route::post('/configuration/profilePreferences', 'App\Http\Controllers\HomeController@session')->name("home.session");
