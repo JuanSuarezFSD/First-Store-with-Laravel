@@ -23,26 +23,39 @@ class AdminProductController extends Controller
             "name" => "required|max:255",
             "description" => "required",
             "price" => "required|decimal:0,2|min:1",
-            "image" => "required|image|mimes:jpeg,png,jpg,gif,svg"
+            "image" => "required|image|mimes:jpeg,png,jpg,gif,svg",
+            "especificaciones" => "mimes:txt"
         ]);
 
         $newProduct = new Product();
         $newProduct -> setName($validateData["name"]);
         $newProduct -> setDescription($validateData["description"]);
         $newProduct -> setPrice($validateData["price"]);;
-        $newProduct -> setImage('image.png');
+        $newProduct -> setImage('default.png');
+        $newProduct -> setEspecificaciones("default");
         $newProduct -> save();
 
         if($request -> hasFile("image")){
-            $imageName =  $newProduct -> $id .'.'. $request->image->extension();
+            $imageName = 'image' . $newProduct -> id .'.'. $request->image->extension();
             $newProduct -> setImage($imageName);
             $newProduct -> save();
-        } 
 
         Storage::disk('public')->put(  
             $imageName,  
             file_get_contents($request->file('image')->getRealPath())  
-        );
+            );
+        } 
+
+        if($request -> hasFile("especificaciones")){
+            $especificacionesName = 'especificaciones' . $newProduct -> id .'.'. 'txt';
+            $newProduct -> setEspecificaciones($especificacionesName);
+            $newProduct -> save();
+ 
+        Storage::disk('public')->put(  
+            $especificacionesName,  
+            file_get_contents($request->file('especificaciones')->getRealPath())  
+            );
+        } 
 
         return redirect()->back();
     }

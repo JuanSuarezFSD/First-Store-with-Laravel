@@ -48,6 +48,11 @@
 				  	<label class="form-label">Adjunta una imagen:</label>
 					<input type="file" class="form-control" name="image">
 				</div>
+            @csrf
+			<div class="mb-3">
+			  	<label class="form-label">Adjuntar un archivo:</label>
+				<input type="file" class="form-control" name="especificaciones">
+			</div>
         <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
     </div>

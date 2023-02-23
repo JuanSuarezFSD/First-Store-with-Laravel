@@ -47,7 +47,7 @@
                 <a class="nav-link active" href="{{route('login')}}">Log In</a>
                 <a class="nav-link active" href="{{route('register')}}">Register</a>
             @else
-            <a class="nav-link active" href="{{route('home.configuration')}}">Configuration</a>
+            <a class="nav-link active" href="{{route('home.configuration')}}">{{Auth::user()->getName()}}</a>
             <a class="nav-link active" href="{{'logout'}}">Log Out</a>
             @endif
             
